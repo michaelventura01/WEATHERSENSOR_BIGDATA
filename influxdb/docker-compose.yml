@@ -1,0 +1,21 @@
+services:
+
+  influxdb:
+    image: influxdb:2.7
+    container_name: iot-influxdb
+    restart: unless-stopped
+
+    ports:
+      - "8086:8086"
+
+    volumes:
+      - ./data:/var/lib/influxdb2
+      - ./config:/etc/influxdb2
+
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
+      DOCKER_INFLUXDB_INIT_PASSWORD: iotbigdata2026
+      DOCKER_INFLUXDB_INIT_ORG: iot-bigdata
+      DOCKER_INFLUXDB_INIT_BUCKET: machine_telemetry
+      DOCKER_INFLUXDB_INIT_RETENTION: 30d

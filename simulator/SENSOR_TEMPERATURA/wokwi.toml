@@ -1,0 +1,4 @@
+[wokwi]
+version = 1
+firmware = "build/SENSOR_TEMPERATURA.ino.bin"
+elf = "build/SENSOR_TEMPERATURA.ino.elf"
