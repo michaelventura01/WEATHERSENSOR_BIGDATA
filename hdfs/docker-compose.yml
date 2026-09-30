@@ -1,0 +1,46 @@
+services:
+
+  namenode:
+    image: apache/hadoop:3
+    container_name: iot-hdfs-namenode
+    hostname: namenode
+    restart: unless-stopped
+
+    ports:
+      - "9870:9870"
+      - "8020:8020"
+
+    volumes:
+      - ./data/namenode:/tmp/hadoop-root/dfs/name
+      - ./config/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml:ro
+      - ./config/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml:ro
+
+    command: >
+      bash -c "
+        if [ ! -f /tmp/hadoop-root/dfs/name/current/VERSION ]; then
+          hdfs namenode -format -force;
+        fi;
+        hdfs namenode
+      "
+
+  datanode:
+    image: apache/hadoop:3
+    container_name: iot-hdfs-datanode
+    hostname: datanode
+    restart: unless-stopped
+
+    ports:
+      - "9864:9864"
+
+    volumes:
+      - ./data/datanode:/tmp/hadoop-root/dfs/data
+      - ./config/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml:ro
+      - ./config/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml:ro
+
+    depends_on:
+      - namenode
+
+    command: >
+      bash -c "
+        hdfs datanode
+      "

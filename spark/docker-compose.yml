@@ -1,0 +1,23 @@
+services:
+
+  spark:
+    image: apache/spark:3.5.7
+    container_name: iot-spark
+    restart: unless-stopped
+
+    volumes:
+      - ./scripts:/opt/spark-apps
+      - ./output:/opt/spark-output
+
+    working_dir: /opt/spark-apps
+
+    networks:
+      - hdfs_default
+
+    command: >
+      bash -c "sleep infinity"
+
+
+networks:
+  hdfs_default:
+    external: true
